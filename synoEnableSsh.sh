@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # check if run as root
 if [ $(id -u "$(whoami)") -ne 0 ]; then
@@ -58,10 +58,24 @@ fi
 # loop through passed users
 for (( i=0; i<${#users[@]}; i++ )); do
 
-	# replace nologin with standard shell
-	if sed -E "s|^(${users[$i]}:.+)/sbin/nologin$|\\1/bin/sh|" /etc/passwd; then
-		echo "Enable SSH for user: ${users[$i]}."
-	fi
+	IFS=: read username homedir <<< "${users[$i]}"
+
+    awk -i inplace -F ':' '
+        BEGIN { OFS=":" }
+        /^'${username}':/  {
+            # replace shell
+            if ($7!="/bin/sh") {
+                sub(/.*/, "/bin/sh", $7)
+                print("Enabled SSH login for user: \"'${username}'\".") > "/dev/stderr"
+            }
+            # replace homedir
+            if ("'${homedir}'"!="" && $6!="'${homedir}'") {
+                $6="'${homedir}'"
+                print("Changed home dir for user: \"'${username}'\".") > "/dev/stderr"
+            }
+        }
+        { print }
+    ' /etc/passwd
 
 done
 
