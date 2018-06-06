@@ -5,6 +5,7 @@ This scripts enables SSH access for users that are not in the administrators gro
 #### 1. Notes
 
 - The script is able to automatically update itself using `git`.
+- You pass the users in the following format `username:/path/to/homedir` (whereby `/path/to/homedir` is optional)
 
 #### 2. Installation
 
@@ -35,7 +36,7 @@ touch syno-enable-ssh-login/autoupdate
 - make the script executable by connecting via `ssh` to the NAS and executing the following command
 
 ```bash
-chmod 755 /volume1/sysadmin/synoEnableSshLogin.sh "<user 1>" "<user 2>"
+chmod 755 /volume1/sysadmin/synoEnableSshLogin.sh
 ```
 
 #### 3. Setup
@@ -43,7 +44,7 @@ chmod 755 /volume1/sysadmin/synoEnableSshLogin.sh "<user 1>" "<user 2>"
 - run script manually
 
 ```bash
-sudo /volume1/sysadmin/syno-enable-ssh-login/synoEnableSshLogin.sh "<user 1>" "<user 2>"
+sudo /volume1/sysadmin/syno-enable-ssh-login/synoEnableSshLogin.sh  "<username 1>[:<homedir 1>]" "<username 2>[:<homedir 2>]"
 ```
 
 *AND/OR*
@@ -71,5 +72,5 @@ Email:                          (enter the appropriate address)
 Send run details only when
   script terminates abnormally: yes
   
-User-defined script: /volume1/sysadmin/syno-enable-ssh-login/synoEnableSshLogin.sh "<user 1>" "<user 2>"
+User-defined script: /volume1/sysadmin/syno-enable-ssh-login/synoEnableSshLogin.sh  "<username 1>[:<homedir 1>]" "<username 2>[:<homedir 2>]"
 ```

@@ -2,7 +2,7 @@
 
 # check if run as root
 if [ $(id -u "$(whoami)") -ne 0 ]; then
-	echo "SynoEnableSsh needs to run as root!"
+	echo "SynoEnableSshLogin needs to run as root!"
 	exit 1
 fi
 
@@ -20,7 +20,7 @@ fi
 
 # check for arguments
 if [ -z $1 ]; then
-	echo "No users passed to SynoEnableSsh!"
+	echo "No users passed to SynoEnableSshLogin!"
 	exit 1
 else
 	echo "This was passed: $*."
@@ -32,10 +32,10 @@ today=$(date +'%Y-%m-%d')
 
 # self update run once daily
 if [ ! -z "${git}" ] && [ -d "$(dirname "$0")/.git" ] && [ -f "$(dirname "$0")/autoupdate" ]; then
-	if [ ! -f /tmp/.synoEnableSshUpdate ] || [ "${today}" != "$(date -r /tmp/.synoEnableSshUpdate +'%Y-%m-%d')" ]; then
+	if [ ! -f /tmp/.synoEnableSshLoginUpdate ] || [ "${today}" != "$(date -r /tmp/.synoEnableSshLoginUpdate +'%Y-%m-%d')" ]; then
 		echo "Checking for updates..."
 		# touch file to indicate update has run once
-		touch /tmp/.synoEnableSshUpdate
+		touch /tmp/.synoEnableSshLoginUpdate
 		# change dir and update via git
 		cd "$(dirname "$0")" || exit 1
 		$git fetch
@@ -44,7 +44,7 @@ if [ ! -z "${git}" ] && [ -d "$(dirname "$0")/.git" ] && [ -f "$(dirname "$0")/a
 			echo "Found a new version, updating..."
 			$git pull --force
 			echo "Executing new version..."
-			exec "$(pwd -P)/synoEnableSsh.sh" "$@"
+			exec "$(pwd -P)/synoEnableSshLogin.sh" "$@"
 			# In case executing new fails
 			echo "Executing new version failed."
 			exit 1
